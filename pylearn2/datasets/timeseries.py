@@ -14,6 +14,7 @@ __email__ = "lehmannr@hs-weingarten.de"
 
 from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
 import numpy as np
+#import functools
 
 class Timeseries(DenseDesignMatrix):
 
@@ -24,7 +25,15 @@ class Timeseries(DenseDesignMatrix):
                 rng=_default_seed, preprocessor=None, fit_preprocessor=False,
                 X_labels=None, y_labels=None, block_length=1):
 
-        timeseries = np.reshape(X[0:(X.shape[0] - X.shape[0] % block_length)], (X[0:(X.shape[0] - X.shape[0] % block_length)].shape[0]/block_length, -1))
-
-        super(Timeseries,self).__init__(timeseries, topo_view, y, view_converter, axes, rng,
-                                         preprocessor, fit_preprocessor, X_labels, y_labels)
+        assert block_length >= 1
+        
+        if block_length != 1:
+            timeseries = np.reshape(X[0:(X.shape[0] - X.shape[0] % block_length)], 
+                                    (X[0:(X.shape[0] - X.shape[0] % block_length)].shape[0]/block_length, -1))
+            super(Timeseries,self).__init__(timeseries, topo_view, y, view_converter, 
+                                    axes, rng, preprocessor, fit_preprocessor, X_labels, y_labels)
+            self.shape = timeseries.shape            
+        else:
+            super(Timeseries,self).__init__(X, topo_view, y, view_converter, axes, 
+                                    rng, preprocessor, fit_preprocessor, X_labels, y_labels)
+            self.shape = X.shape

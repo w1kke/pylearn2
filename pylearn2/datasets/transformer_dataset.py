@@ -182,6 +182,9 @@ class TransformerDataset(Dataset):
 
     @wraps(Dataset.get_num_examples)
     def get_num_examples(self):
+        import numpy as np
+        if type(self.raw) is np.ndarray:
+            return self.raw.shape[0]
         return self.raw.get_num_examples()
 
 
