@@ -14,7 +14,6 @@ __email__ = "lehmannr@hs-weingarten.de"
 
 from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
 import numpy as np
-#import functools
 
 class Timeseries(DenseDesignMatrix):
 
@@ -26,7 +25,7 @@ class Timeseries(DenseDesignMatrix):
                 X_labels=None, y_labels=None, block_length=1):
 
         assert block_length >= 1
-        
+       
         if block_length != 1:
             timeseries = np.reshape(X[0:(X.shape[0] - X.shape[0] % block_length)], 
                                     (X[0:(X.shape[0] - X.shape[0] % block_length)].shape[0]/block_length, -1))
