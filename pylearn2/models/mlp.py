@@ -1299,9 +1299,6 @@ class Softmax(Layer):
             desired_dim = self.input_dim
         self.desired_space = VectorSpace(desired_dim)
 
-        if self.desired_space.dtype != self.input_space.dtype:
-            self.desired_space.dtype = self.input_space.dtype
-
         if not self.needs_reformat:
             assert self.desired_space == self.input_space
 
@@ -4023,6 +4020,14 @@ class PretrainedLayer(Layer):
     def get_layer_monitoring_channels(self, state_below=None,
                                       state=None, targets=None):
         return OrderedDict([])
+
+    @wraps(Layer.get_weights)
+    def get_weights(self):
+        return self.layer_content.get_weights()
+
+    @wraps(Layer.get_weights_format)
+    def get_weights_format(self):
+        return self.layer_content.get_weights_format()
 
     @wraps(Layer.fprop)
     def fprop(self, state_below):
